@@ -1,6 +1,4 @@
 require('dotenv').config();
-console.log('--- BOOT DEBUG ---');
-console.log('APP-LEVEL ALPACA KEY:', process.env.ALPACA_API_KEY ? process.env.ALPACA_API_KEY.substring(0, 5) + '...' : 'UNDEFINED!');
 
 const app = require('./app');
 const db = require('./config/db');

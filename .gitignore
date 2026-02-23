@@ -1,5 +1,19 @@
 node_modules/
 .env
+.env.local
 *.log
 dist/
 .DS_Store
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# Capacitor platform builds (generated via `npx cap add`)
+frontend/android/
+frontend/ios/
+
+# IDE
+.idea/
+.vscode/
+*.swp

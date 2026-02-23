@@ -30,15 +30,4 @@ router.get('/orders', auth, controller.getOrders);                  // ?status=a
 router.get('/positions', auth, controller.getPositions);
 router.get('/positions/:symbol', auth, controller.getPosition);     // /positions/AAPL
 
-// ── Debug ────────────────────────────────────────────
-router.get('/healthcheck-alpaca', async (req, res) => {
-    try {
-        const alpaca = require('../utils/alpacaService');
-        const q = await alpaca.getStockSnapshot('NVDA');
-        res.json({ live_code: true, snapshot: q });
-    } catch (e) {
-        res.status(500).json({ live_code: true, error: e.message, data: e.response?.data });
-    }
-});
-
 module.exports = router;
