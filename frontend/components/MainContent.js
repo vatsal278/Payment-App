@@ -8,12 +8,16 @@ import { usePathname } from "next/navigation";
  */
 export default function MainContent({ children }) {
     const pathname = usePathname();
-    const hideNav = ["/login", "/register"].includes(pathname);
+    const isAuthPage = ["/login", "/register"].includes(pathname);
+
+    // Auth pages use the full viewport — no sidebar offset, borders, or shadow
+    if (isAuthPage) {
+        return <>{children}</>;
+    }
 
     return (
         <div
-            className={`flex flex-col min-h-screen bg-white dark:bg-black p-6 transition-colors duration-300 mx-auto relative border-x border-gray-100 dark:border-zinc-800 shadow-xl ${hideNav ? "" : "md:ml-20 lg:ml-56"
-                }`}
+            className="flex flex-col min-h-screen bg-white dark:bg-black p-6 transition-colors duration-300 mx-auto relative md:ml-20 lg:ml-56"
         >
             {children}
         </div>
