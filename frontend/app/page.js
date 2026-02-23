@@ -29,7 +29,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
-import QrScanner from "react-qr-scanner";
+import QrScannerView from "@/components/QrScannerView";
 import StockLogo from "@/components/StockLogo";
 import { STOCKS, CRYPTOS } from "@/lib/assets";
 
@@ -732,27 +732,28 @@ export default function Home() {
               </div>
             ) : (
               <>
-                <QrScanner
-                  delay={300}
-                  onScan={(data) => {
-                    if (data && data.text) {
-                      const url = new URL(data.text);
+                <QrScannerView
+                  active={isScanOpen && !camError}
+                  onScan={(decodedText) => {
+                    try {
+                      const url = new URL(decodedText);
                       const scannedCashtag = url.searchParams.get("cashtag");
                       if (scannedCashtag) {
                         setIsScanOpen(false);
                         router.push(`/pay?cashtag=${scannedCashtag}`);
                       }
+                    } catch {
+                      // Not a valid URL — ignore
                     }
                   }}
                   onError={(err) => {
-                    if (err?.name === "NotAllowedError" || err?.message?.includes("Permission")) {
+                    const msg = err?.message || String(err);
+                    if (msg.includes("NotAllowed") || msg.includes("Permission")) {
                       setCamError(true);
                     } else {
-                      console.error(err);
+                      console.error("QR scan error:", err);
                     }
                   }}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  constraints={{ video: { facingMode: "environment" } }}
                 />
                 <div className="w-full h-1 bg-cashapp absolute top-0 animate-[scan_2s_linear_infinite]" />
                 <p className="absolute bottom-4 text-[10px] text-zinc-500 font-bold uppercase tracking-widest bg-black/50 px-2 py-1 rounded">
