@@ -1,0 +1,823 @@
+{
+    "info": {
+        "name": "FlowCash API",
+        "description": "Cash App clone — peer-to-peer payment platform with Stripe funding",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:3000"
+        },
+        {
+            "key": "accessToken",
+            "value": ""
+        },
+        {
+            "key": "refreshToken",
+            "value": ""
+        },
+        {
+            "key": "userId",
+            "value": ""
+        },
+        {
+            "key": "cashtag",
+            "value": ""
+        },
+        {
+            "key": "transactionId",
+            "value": ""
+        },
+        {
+            "key": "notificationId",
+            "value": ""
+        },
+        {
+            "key": "paymentMethodId",
+            "value": ""
+        }
+    ],
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{accessToken}}",
+                "type": "string"
+            }
+        ]
+    },
+    "item": [
+        {
+            "name": "Health",
+            "item": [
+                {
+                    "name": "Health Check",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/health",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success) {",
+                                    "  pm.collectionVariables.set('accessToken', res.data.accessToken);",
+                                    "  pm.collectionVariables.set('refreshToken', res.data.refreshToken);",
+                                    "  pm.collectionVariables.set('userId', res.data.user.id);",
+                                    "  pm.collectionVariables.set('cashtag', res.data.user.cashtag);",
+                                    "  pm.test('Registration successful', () => pm.response.to.have.status(201));",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/auth/register",
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"securepass123\",\n  \"fullName\": \"John Doe\",\n  \"phone\": \"+15551234567\",\n  \"cashtag\": \"$john\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success) {",
+                                    "  pm.collectionVariables.set('accessToken', res.data.accessToken);",
+                                    "  pm.collectionVariables.set('refreshToken', res.data.refreshToken);",
+                                    "  pm.collectionVariables.set('userId', res.data.user.id);",
+                                    "  pm.collectionVariables.set('cashtag', res.data.user.cashtag);",
+                                    "  pm.test('Login successful', () => pm.response.to.have.status(200));",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/auth/login",
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"securepass123\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Me",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/auth/me"
+                    }
+                },
+                {
+                    "name": "Refresh Token",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success) {",
+                                    "  pm.collectionVariables.set('accessToken', res.data.accessToken);",
+                                    "  pm.collectionVariables.set('refreshToken', res.data.refreshToken);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/auth/refresh",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/auth/logout"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Transfer",
+            "item": [
+                {
+                    "name": "Send Money",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success && res.data.transaction) {",
+                                    "  pm.collectionVariables.set('transactionId', res.data.transaction.id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/transfer/send",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cashtag\": \"$alice\",\n  \"amount\": 5000,\n  \"note\": \"Lunch 🍕\"\n}"
+                        },
+                        "description": "Amount in cents (5000 = $50). Auto-saves transactionId."
+                    }
+                },
+                {
+                    "name": "Request Money",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success && res.data.transaction) {",
+                                    "  pm.collectionVariables.set('transactionId', res.data.transaction.id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/transfer/request",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cashtag\": \"$bob\",\n  \"amount\": 2000,\n  \"note\": \"Gas money\"\n}"
+                        },
+                        "description": "Auto-saves transactionId. Login as the other user, then use Respond to Request."
+                    }
+                },
+                {
+                    "name": "Respond to Request (Accept)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/transfer/respond/{{transactionId}}",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"action\": \"accept\"\n}"
+                        },
+                        "description": "Replace {{transactionId}} with an actual transaction UUID"
+                    }
+                },
+                {
+                    "name": "Respond to Request (Decline)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/transfer/respond/{{transactionId}}",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"action\": \"decline\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Transaction History",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/transfer/history?page=1&limit=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "transfer",
+                                "history"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "20"
+                                },
+                                {
+                                    "key": "type",
+                                    "value": "sent",
+                                    "disabled": true,
+                                    "description": "Options: sent, received, requests"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Transaction by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/transfer/{{transactionId}}",
+                        "description": "Replace {{transactionId}} with an actual transaction UUID"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Wallet",
+            "item": [
+                {
+                    "name": "Get Balance",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/wallet/balance"
+                    }
+                },
+                {
+                    "name": "Get Statement",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/wallet/statement?page=1&limit=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "wallet",
+                                "statement"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Search Users",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/users/search?q=alice",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "users",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "q",
+                                    "value": "alice"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get User Profile",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/users/$alice"
+                    }
+                },
+                {
+                    "name": "Update Profile",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/api/users/profile",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"fullName\": \"John Updated\",\n  \"avatarUrl\": \"https://example.com/avatar.png\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Change Password",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/api/users/password",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"currentPassword\": \"securepass123\",\n  \"newPassword\": \"newsecurepass456\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Notifications",
+            "item": [
+                {
+                    "name": "Get Notifications",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success && res.data.notifications && res.data.notifications.length > 0) {",
+                                    "  pm.collectionVariables.set('notificationId', res.data.notifications[0].id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/notifications?page=1&limit=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "notifications"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "20"
+                                }
+                            ]
+                        },
+                        "description": "Auto-saves first notificationId for Mark as Read."
+                    }
+                },
+                {
+                    "name": "Mark Notification as Read",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/api/notifications/{{notificationId}}/read",
+                        "description": "Replace {{notificationId}} with an actual notification UUID"
+                    }
+                },
+                {
+                    "name": "Mark All as Read",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/api/notifications/read-all"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Negative Tests",
+            "description": "Security and logic edge cases to verify app robustness.",
+            "item": [
+                {
+                    "name": "1.1 Zombie Token (Expired/Invalid)",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/auth/me",
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.invalid.payload",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "description": "Expected: 401 Unauthorized. Tests that invalid/expired tokens are rejected."
+                    }
+                },
+                {
+                    "name": "1.2 Impersonator (ID Traversal / BOLA)",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/api/users/profile",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"id\": \"some-other-uuid\",\n  \"fullName\": \"Attacker Name\"\n}"
+                        },
+                        "description": "Expected: Success (but only updates YOUR profile). This verifies that the server ignores the 'id' in the body and uses the JWT for identity."
+                    }
+                },
+                {
+                    "name": "1.3 SQL Injection Registration",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/auth/register",
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"test@example.com' OR 1=1 --\",\n  \"password\": \"password123\",\n  \"fullName\": \"Hacker\",\n  \"phone\": \"123456789\",\n  \"cashtag\": \"$hacker\"\n}"
+                        },
+                        "description": "Expected: 400 Bad Request (Validation error). Tests sanitization."
+                    }
+                },
+                {
+                    "name": "2.1 Negative Wealth Bug",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/transfer/send",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cashtag\": \"$alice\",\n  \"amount\": -500,\n  \"note\": \"Stealing money 😈\"\n}"
+                        },
+                        "description": "Expected: 400 Bad Request. Tests that only positive amounts are allowed."
+                    }
+                },
+                {
+                    "name": "2.2 Empty Pocket (Overdraw)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/transfer/send",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cashtag\": \"$alice\",\n  \"amount\": 9999999999,\n  \"note\": \"Overdrawing\"\n}"
+                        },
+                        "description": "Expected: 400 Bad Request (Insufficient balance)."
+                    }
+                },
+                {
+                    "name": "2.3 Self-Loop",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/transfer/send",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cashtag\": \"{{cashtag}}\",\n  \"amount\": 100,\n  \"note\": \"Sending to self\"\n}"
+                        },
+                        "description": "Expected: 400 Bad Request. Tests that you can't send money to yourself."
+                    }
+                },
+                {
+                    "name": "3.1 Stolen Webhook (Signature Verification)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/funding/webhook",
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"id\": \"evt_fake\",\n  \"type\": \"payment_intent.succeeded\"\n}"
+                        },
+                        "description": "Expected: 400 Bad Request. Tests that the server rejects webhooks without a valid Stripe signature."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Financial Integrity",
+            "description": "Critical robustness tests for production readiness.",
+            "item": [
+                {
+                    "name": "Idempotency (Double-Pay Protection)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/transfer/send",
+                        "header": [
+                            {
+                                "key": "X-Idempotency-Key",
+                                "value": "unique-random-uuid-12345",
+                                "description": "Send same key twice: 1st returns 201, 2nd returns 200 (existing)"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cashtag\": \"$alice\",\n  \"amount\": 100,\n  \"note\": \"Idempotent payment test\"\n}"
+                        },
+                        "description": "Tests that duplicate requests with the same key are ignored."
+                    }
+                },
+                {
+                    "name": "Manual Stripe Sync (Reconciliation)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/funding/sync/{{stripeReferenceId}}",
+                        "description": "Use this if a Stripe payment is SUCCESS on Stripe but PENDING in FlowCash. It fetches the latest from Stripe and updates our wallet."
+                    }
+                },
+                {
+                    "name": "Strict Login Rate Limit (10x)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/auth/login",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"nonexistent@example.com\",\n  \"password\": \"wrongpass\"\n}"
+                        },
+                        "description": "Run this 10 times in a row using the Runner. On the 11th try, you will get a 429 Too Many Requests."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Funding (Stripe)",
+            "description": "Cash In / Cash Out via Stripe. Requires a Stripe test key in .env.",
+            "item": [
+                {
+                    "name": "Get Payment Methods",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/funding/methods"
+                    }
+                },
+                {
+                    "name": "Add Payment Method",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.success) {",
+                                    "  pm.collectionVariables.set('paymentMethodId', res.data.paymentMethod.id);",
+                                    "  pm.test('Payment method added', () => pm.response.to.have.status(201));",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/funding/methods",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"stripe_payment_method_id\": \"pm_card_visa\",\n  \"nickname\": \"My Visa Card\"\n}"
+                        },
+                        "description": "In production, stripe_payment_method_id comes from Stripe.js on the frontend. For testing, use Stripe test tokens like pm_card_visa, pm_card_mastercard, pm_card_amex."
+                    }
+                },
+                {
+                    "name": "Remove Payment Method",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/api/funding/methods/{{paymentMethodId}}",
+                        "description": "Detaches from Stripe and soft-deletes in DB"
+                    }
+                },
+                {
+                    "name": "Cash In (Add Funds)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/funding/cash-in",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"payment_method_db_id\": \"{{paymentMethodId}}\",\n  \"amount\": 5000\n}"
+                        },
+                        "description": "Amount in cents. 5000 = $50.00. Min $1 (100), Max $100,000 (10000000)."
+                    }
+                },
+                {
+                    "name": "Cash Out (Withdraw)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/funding/cash-out",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"amount\": 2000,\n  \"speed\": \"standard\"\n}"
+                        },
+                        "description": "Amount in cents. Speed: 'standard' (free) or 'instant' (1.5% fee, min $0.25)."
+                    }
+                },
+                {
+                    "name": "Funding History",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/api/funding/history?page=1&limit=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "funding",
+                                "history"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Stripe Webhook (Public)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/funding/webhook",
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{}"
+                        },
+                        "description": "This is called by Stripe automatically. Normally you don't call this manually — the Stripe CLI forwards events here. Included for reference only."
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+{
+  "name": "flowcash",
+  "version": "1.0.0",
+  "description": "FlowCash — A Cash App clone built with Node.js, Express, and PostgreSQL",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "migrate": "node -e \"require('dotenv').config(); const {Pool}=require('pg'); const fs=require('fs'); const pool=new Pool({connectionString:process.env.DATABASE_URL}); pool.query(fs.readFileSync('./src/database/schema.sql','utf8')).then(()=>{console.log('✅ Migration complete');pool.end()}).catch(e=>{console.error('❌ Migration failed:',e.message);pool.end();process.exit(1)})\"",
+    "seed": "node -e \"require('dotenv').config(); const {Pool}=require('pg'); const fs=require('fs'); const pool=new Pool({connectionString:process.env.DATABASE_URL}); pool.query(fs.readFileSync('./src/database/seed.sql','utf8')).then(()=>{console.log('✅ Seed complete');pool.end()}).catch(e=>{console.error('❌ Seed failed:',e.message);pool.end();process.exit(1)})\""
+  },
+  "keywords": [
+    "cashapp",
+    "fintech",
+    "payments"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.13.5",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.8.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.1",
+    "pg": "^8.13.1",
+    "stripe": "^20.3.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^11.0.5"
+  }
+}

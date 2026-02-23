@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">FlowCash</string>
+    <string name="title_activity_main">FlowCash</string>
+    <string name="package_name">com.flowcash.app</string>
+    <string name="custom_url_scheme">com.flowcash.app</string>
+</resources>

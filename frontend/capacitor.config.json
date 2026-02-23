@@ -1,0 +1,23 @@
+{
+    "appId": "com.flowcash.app",
+    "appName": "FlowCash",
+    "webDir": "out",
+    "server": {
+        "androidScheme": "http",
+        "cleartext": true
+    },
+    "plugins": {
+        "SplashScreen": {
+            "launchShowDuration": 2000,
+            "launchAutoHide": true,
+            "backgroundColor": "#000000",
+            "androidSplashResourceName": "splash",
+            "iosSplashResourceName": "Default",
+            "showSpinner": false
+        },
+        "StatusBar": {
+            "style": "DARK",
+            "backgroundColor": "#000000"
+        }
+    }
+}
