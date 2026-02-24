@@ -27,6 +27,13 @@ export default function RegisterPage() {
     const router = useRouter();
     const otpRefs = useRef([]);
 
+    // Auto-redirect if already logged in (but not if currently doing PIN setup/Success)
+    useEffect(() => {
+        if (user && step < 8) {
+            router.push("/");
+        }
+    }, [user, router, step]);
+
     // Splash auto-advance
     useEffect(() => {
         if (step === 0) {

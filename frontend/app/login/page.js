@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -14,8 +14,14 @@ export default function LoginPage() {
     const [fieldErrors, setFieldErrors] = useState({});
     const [touched, setTouched] = useState({});
 
-    const { login } = useAuth();
+    const { user, login } = useAuth();
     const router = useRouter();
+
+    useEffect(() => {
+        if (user) {
+            router.push("/");
+        }
+    }, [user, router]);
 
     const validate = (field, value) => {
         const errors = { ...fieldErrors };
