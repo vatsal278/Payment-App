@@ -120,7 +120,7 @@ export default function PayPage() {
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-white dark:bg-black p-6">
+        <div className="flex flex-col flex-1 w-full max-w-md mx-auto">
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <button onClick={() => step === 1 ? router.back() : setStep(1)} className="p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full transition-all">
@@ -145,7 +145,7 @@ export default function PayPage() {
 
                     <Keypad amount={amount} setAmount={setAmount} />
 
-                    <div className="flex space-x-4 mt-auto w-full max-w-xs pb-8">
+                    <div className="flex space-x-4 mt-8 w-full pb-8">
                         <button
                             onClick={() => handleAction("pay")}
                             disabled={parseFloat(amount) <= 0}
@@ -224,7 +224,7 @@ export default function PayPage() {
                     <button
                         disabled={!cashtag || isSubmitting}
                         onClick={() => { pendingAction.current = handleSend; setIsPinOpen(true); }}
-                        className={`mt-auto ${mode === 'request' ? 'bg-zinc-100 text-black shadow-zinc-200/20' : 'bg-cashapp text-white shadow-cashapp/20'} font-bold py-5 rounded-full flex items-center justify-center space-x-2 disabled:opacity-50 transition-all hover:scale-[1.02] active:scale-95 shadow-lg mb-8`}
+                        className={`mt-10 ${mode === 'request' ? 'bg-zinc-100 text-black shadow-zinc-200/20' : 'bg-cashapp text-white shadow-cashapp/20'} font-bold py-5 rounded-full flex items-center justify-center space-x-2 disabled:opacity-50 transition-all hover:scale-[1.02] active:scale-95 shadow-lg mb-8`}
                     >
                         {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : <span>{mode === 'request' ? 'Request' : 'Pay'} ${parseFloat(amount).toFixed(2)}</span>}
                     </button>
