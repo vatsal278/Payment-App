@@ -38,11 +38,9 @@ export default function QrScannerView({ onScan, onError, active }) {
 
             const scannerId = "flowcash-qr-reader";
 
-            // Ensure the container has the target div
-            if (!document.getElementById(scannerId)) {
-                const div = document.createElement("div");
-                div.id = scannerId;
-                containerRef.current.appendChild(div);
+            // Clear container before injecting fresh div to avoid duplicate IDs
+            if (containerRef.current) {
+                containerRef.current.innerHTML = `<div id="${scannerId}"></div>`;
             }
 
             const scanner = new Html5Qrcode(scannerId);
@@ -54,10 +52,11 @@ export default function QrScannerView({ onScan, onError, active }) {
                     { fps: 10, qrbox: { width: 220, height: 220 } },
                     (decodedText) => {
                         onScan?.(decodedText);
-                        // Stop after first successful scan
-                        scanner.stop().catch(() => { });
+                        // Do not immediately stop scanner here, let the parent component unmount/deactivate it via props
                     },
-                    () => { } // ignore per-frame "no QR found" 
+                    (errorMessage) => {
+                        // ignore background scan errors ("No QR found")
+                    }
                 )
                 .then(() => setReady(true))
                 .catch((err) => {

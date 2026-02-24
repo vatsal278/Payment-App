@@ -735,15 +735,23 @@ export default function Home() {
                 <QrScannerView
                   active={isScanOpen && !camError}
                   onScan={(decodedText) => {
+                    const text = decodedText?.trim();
+                    if (!text) return;
+
+                    let scannedCashtag = null;
                     try {
-                      const url = new URL(decodedText);
-                      const scannedCashtag = url.searchParams.get("cashtag");
-                      if (scannedCashtag) {
-                        setIsScanOpen(false);
-                        router.push(`/pay?cashtag=${scannedCashtag}`);
-                      }
+                      const url = new URL(text);
+                      scannedCashtag = url.searchParams.get("cashtag");
                     } catch {
-                      // Not a valid URL — ignore
+                      // Not a URL — check if it looks like a raw cashtag
+                      if (text.startsWith("$") || /^[a-zA-Z0-9_]+$/.test(text)) {
+                        scannedCashtag = text.startsWith("$") ? text : `$${text}`;
+                      }
+                    }
+
+                    if (scannedCashtag) {
+                      setIsScanOpen(false);
+                      router.push(`/pay?cashtag=${scannedCashtag}`);
                     }
                   }}
                   onError={(err) => {
