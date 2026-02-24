@@ -54,8 +54,8 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen bg-white dark:bg-black p-6 transition-colors duration-300">
-            <div className="flex-1 flex flex-col justify-center max-w-sm mx-auto w-full">
+        <div className="fixed inset-0 flex flex-col items-center justify-center bg-white dark:bg-black px-6 py-6 transition-colors duration-300 overflow-y-auto">
+            <div className="flex flex-col justify-center max-w-md w-full">
                 <div className="flex justify-center mb-8">
                     <img src="/flowcash-logo.png" alt="FlowCash" className="w-24 h-24 rounded-3xl shadow-xl shadow-cashapp/10" />
                 </div>
