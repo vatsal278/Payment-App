@@ -269,7 +269,8 @@ exports.placeOrder = async (req, res, next) => {
     }
 
     const isCrypto =
-      symbol.includes("/") || symbol.includes("BTC") || symbol.includes("ETH");
+      symbol.includes("/") ||
+      /(BTC|ETH|LTC|BCH|UNI|LINK|AAVE)USD?/i.test(symbol);
 
     const normalizedSym =
       isCrypto && !symbol.includes("/")

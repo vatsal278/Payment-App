@@ -407,7 +407,7 @@ export default function CryptoDetailPage() {
       </div>
 
       {/* Buy / Sell / Send Buttons */}
-      <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-6 bg-white/80 dark:bg-black/80 backdrop-blur-md border-t border-gray-100 dark:border-zinc-800">
+      <div className="fixed bottom-[72px] md:bottom-0 left-0 right-0 max-w-md mx-auto p-6 bg-white/80 dark:bg-black/80 backdrop-blur-md border-t border-gray-100 dark:border-zinc-800">
         <div className="flex space-x-3">
           <button
             onClick={openBuy}

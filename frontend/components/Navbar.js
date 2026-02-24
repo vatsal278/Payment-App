@@ -49,7 +49,9 @@ export default function Navbar() {
   const { user } = useAuth();
 
   // Hide navbar on login/register screens, or if the user is not logged in / loading
-  if (["/login", "/register"].includes(pathname) || !user) return null;
+  if (["/login", "/register"].includes(pathname) || !user) {
+    return null;
+  }
 
   return (
     <>
