@@ -1,16 +1,18 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 /**
  * Wraps page content and adds sidebar offset only when the Navbar is visible.
- * On login/register pages the content uses the full width.
+ * On login/register pages or when not authenticated, the content uses the full width.
  */
 export default function MainContent({ children }) {
     const pathname = usePathname();
-    const isAuthPage = ["/login", "/register"].includes(pathname);
+    const { user } = useAuth();
+    const isAuthPage = ["/login", "/register"].includes(pathname) || !user;
 
-    // Auth pages use the full viewport — no sidebar offset, borders, or shadow
+    // Auth pages or loading screens use the full viewport — no sidebar offset, borders, or shadow
     if (isAuthPage) {
         return <>{children}</>;
     }

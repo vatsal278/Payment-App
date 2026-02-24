@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Home, CreditCard, Clock, Plus } from "lucide-react";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { useAuth } from "@/context/AuthContext";
 
 // Custom Investing Icon combining a chart and Bitcoin logo
 const InvestingIcon = ({ className }) => (
@@ -45,9 +46,10 @@ const navItems = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { user } = useAuth();
 
-  // Hide navbar on login/register screens
-  if (["/login", "/register"].includes(pathname)) return null;
+  // Hide navbar on login/register screens, or if the user is not logged in / loading
+  if (["/login", "/register"].includes(pathname) || !user) return null;
 
   return (
     <>
