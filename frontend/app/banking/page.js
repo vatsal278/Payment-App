@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/Navbar";
+
 import { Landmark, ArrowRight } from "lucide-react";
 
 export default function BankingPage() {
@@ -49,7 +49,7 @@ export default function BankingPage() {
                 ))}
             </div>
 
-            <Navbar />
+
         </div>
     );
 }

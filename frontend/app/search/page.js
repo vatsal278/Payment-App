@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/Navbar";
+
 import api from "@/lib/api";
 import { Search, Star, Clock, Loader2, UserPlus, X } from "lucide-react";
 
@@ -210,7 +210,7 @@ export default function SearchPage() {
                 </>
             )}
 
-            <Navbar />
+
         </div>
     );
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/Navbar";
+
 import PriceChart from "@/components/PriceChart";
 import { STOCKS } from "@/lib/assets";
 import { ArrowLeft, TrendingUp, Loader2 } from "lucide-react";
@@ -223,7 +223,7 @@ export default function StocksPage() {
         )}
       </div>
 
-      <Navbar />
+
     </div>
   );
 }

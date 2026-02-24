@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/Navbar";
+
 import { CreditCard, ArrowRight, Lock, Unlock, Eye, EyeOff, Copy, Check } from "lucide-react";
 
 /**
@@ -265,7 +265,7 @@ export default function CardsPage() {
         </>
       )}
 
-      <Navbar />
+
     </div>
   );
 }

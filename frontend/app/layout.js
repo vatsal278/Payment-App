@@ -2,6 +2,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { ToastProvider } from "@/components/Toast";
+import Navbar from "@/components/Navbar";
 import MainContent from "@/components/MainContent";
 import "./globals.css";
 
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
                     <AuthProvider>
                         <ThemeProvider>
                             <ToastProvider>
+                                <Navbar />
                                 <MainContent>
                                     {children}
                                 </MainContent>

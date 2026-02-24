@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/Navbar";
+
 import ThemeToggle from "@/components/ThemeToggle";
 import Modal from "@/components/Modal";
 import PinModal from "@/components/PinModal";
@@ -1442,7 +1442,7 @@ export default function Home() {
         userId={user.id}
       />
 
-      <Navbar />
+
     </div>
   );
 }

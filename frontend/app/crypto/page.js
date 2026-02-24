@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/Navbar";
+
 import PriceChart from "@/components/PriceChart";
 import { CRYPTOS } from "@/lib/assets";
 import { ArrowLeft, Loader2 } from "lucide-react";
@@ -234,7 +234,7 @@ export default function CryptoPage() {
         )}
       </div>
 
-      <Navbar />
+
     </div>
   );
 }

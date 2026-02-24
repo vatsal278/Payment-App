@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/Navbar";
+
 import StockLogo from "@/components/StockLogo";
 import { useToast } from "@/components/Toast";
 import api from "@/lib/api";
@@ -377,7 +377,7 @@ export default function ActivityPage() {
         )}
       </div>
 
-      <Navbar />
+
     </div >
   );
 }
